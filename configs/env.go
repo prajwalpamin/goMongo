@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -12,5 +13,6 @@ func EnvMongoUri() string {
 	if err != nil {
 		log.Fatal("Error loadin env file")
 	}
+	fmt.Println("env file loaded successfully %v", os.Getenv("MONGO_URI"))
 	return os.Getenv("MONGO_URI")
 }

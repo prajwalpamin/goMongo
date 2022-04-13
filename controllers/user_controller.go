@@ -56,7 +56,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("User inserted with insertid %v", result.InsertedID)
+	fmt.Printf("User inserted with insertid %v ", result.InsertedID)
 
 }
 
@@ -68,11 +68,13 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 // @Produce  json
 // @Success 200 {array} model.User
 // @Router /users [get]
+
 func GetUsers(w http.ResponseWriter, r *http.Request) {
 	var users []model.User
-	result, err := userCollection.Find(context.Background(), bson.M{})
+
+	result, err := userCollection.Find(context.Background(), bson.D{})
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	defer result.Close(context.Background())
 
@@ -86,3 +88,32 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(users)
 }
+
+// func GetUsers(w http.ResponseWriter, r *http.Request) {
+// 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+// 	// params := mux.Vars(r)
+// 	// userId := params["userId"]
+// 	var users []model.User
+// 	defer cancel()
+
+// 	// objId, _ := primitive.ObjectIDFromHex(userId)
+
+// 	results, err := userCollection.Find(ctx, bson.D{{}})
+
+// 	if err != nil {
+// 		w.WriteHeader(http.StatusInternalServerError)
+// 		response := responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}}
+// 		json.NewEncoder(w).Encode(response)
+// 		return
+// 	}
+// 	for results.Next(context.Background()) {
+// 		var sinlgeUser model.User
+// 		err := results.Decode(&sinlgeUser)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		users = append(users, sinlgeUser)
+// 	}
+// 	json.NewEncoder(w).Encode(users)
+
+// }
